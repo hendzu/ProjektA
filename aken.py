@@ -14,20 +14,20 @@ class Kaart(Frame):
 
     def refpot(self):
         self.photohe=PhotoImage(file=get_pic(str(hero.pot)))
-        self.Heal=Button(self,bg="black",relief=FLAT,image=self.photohe,command=self.heal).grid(column=13,row=7,sticky=(N,S,W,E))
+        self.Heal=Button(self,bg="black",relief=FLAT,image=self.photohe,command=self.heal).grid(column=13,row=6,sticky=(N,S,W,E))
 
     def refwep(self):
         self.photowep=PhotoImage(file=get_pic(str(hero.W.pic)))
-        self.wepinf=Label(self,bg="black",fg="red",font=("Matura MT Script Capitals",9),text=hero.W.name+"\n damage- "+str(hero.W.mindam)+"-"+str(hero.W.maxdam)+"\n"+"critical chance: "+str(int(hero.W.crit*100))+"%").grid(column=12,row=6,columnspan=2,sticky=(N,S,W,E))
-        self.wep=Label(self,bg="black",image=self.photowep).grid(column=11,row=6,sticky=(N,S,W,E))
+        self.wepinf=Label(self,bg="black",fg="red",font=("Matura MT Script Capitals",9),text=hero.W.name+"\n damage- "+str(hero.W.mindam)+"-"+str(hero.W.maxdam)+"\n"+"critical chance: "+str(int(hero.W.crit*100))+"%").grid(column=12,row=5,columnspan=2,sticky=(N,S,W,E))
+        self.wep=Label(self,bg="black",image=self.photowep).grid(column=11,row=5,sticky=(N,S,W,E))
 
     def refarm(self):
         self.photoarm=PhotoImage(file=get_pic(str(hero.A.pic)))
-        self.arminf=Label(self,bg="black",fg="red",font=("Matura MT Script Capitals",9),text=hero.A.name+"\n defence- "+str(hero.A.defence)).grid(column=12,row=5,columnspan=2,sticky=(N,S,W,E))
-        self.arm=Label(self,bg="black",image=self.photoarm).grid(column=11,row=5,sticky=(N,S,W,E))
+        self.arminf=Label(self,bg="black",fg="red",font=("Matura MT Script Capitals",9),text=hero.A.name+"\n defence- "+str(hero.A.defence)).grid(column=12,row=4,columnspan=2,sticky=(N,S,W,E))
+        self.arm=Label(self,bg="black",image=self.photoarm).grid(column=11,row=4,sticky=(N,S,W,E))
 
     def refelud(self):
-        self.elud=Label(self,bg="black",fg="red",text=(hero.hp,"/100")).grid(row=1,column=11,sticky=(N,W,S,E))
+        self.elud=Label(self,bg="black",fg="red",text=(hero.hp,"/100"),font=("Matura MT Script Capitals",9)).grid(row=1,column=11,sticky=(N,W,S,E))
         self.eludebar=Progressbar(self,value=hero.hp).grid(row=1,column=12,columnspan=2,sticky=(N,W,S,E))
 
         self.mName=Label(self,bg="black",fg="Red",text=hero.M.name,font=("Matura MT Script Capitals",12)).grid(column=11,row=2,columnspan=3,sticky=(N,S,W,E))
@@ -51,18 +51,18 @@ class Kaart(Frame):
     def newmap(self):
         self.Kaart=[]
         Kangelane,Map=out()
-        for row in range(11):
+        for row in range(7):
             Row=[]
-            for element in range(11):
-                Row.append(Label(self,bg="black",image=Map[Kangelane[0]+row-5][Kangelane[1]+element-5]).grid(column=element,row=row,sticky=(N,S,W,E)))
+            for element in range(7):
+                Row.append(Label(self,bg="black",image=Map[Kangelane[0]+row-3][Kangelane[1]+element-3]).grid(column=element+1,row=row+2,sticky=(N,S,W,E)))
             self.Kaart.append(Row)
-        self.Kaart[5][5]=Label(self,bg="black",image=self.photokangelane).grid(column=5,row=5,sticky=(N,S,W,E))
+        self.Kaart[5][5]=Label(self,bg="black",image=self.photokangelane).grid(column=4,row=5,sticky=(N,S,W,E))
     def refmap(self):
         Kangelane,Map=out()
-        for row in range(11):
-            for element in range(11):
-                self.Kaart[row][element]=Label(self,bg="black",image=Map[Kangelane[0]+row-5][Kangelane[1]+element-5]).grid(column=element,row=row,sticky=(N,S,W,E))
-        self.Kaart[5][5]=Label(self,bg="black",image=self.photokangelane).grid(column=5,row=5,sticky=(N,S,W,E))
+        for row in range(7):
+            for element in range(7):
+                self.Kaart[row][element]=Label(self,bg="black",image=Map[Kangelane[0]+row-3][Kangelane[1]+element-3]).grid(column=element+1,row=row+2,sticky=(N,S,W,E))
+        self.Kaart[5][5]=Label(self,bg="black",image=self.photokangelane).grid(column=4,row=5,sticky=(N,S,W,E))
     def createwidgets(self):
 
         self.photokangelane=PhotoImage(file=get_pic(hero.gender))
@@ -83,21 +83,21 @@ class Kaart(Frame):
         style=Style()
         style.configure("SD",background="black")
         self.Name=Label(self,bg="black",fg="Red",text=hero.name,font=("Matura MT Script Capitals",12)).grid(column=11,row=0,columnspan=3,sticky=(N,S,W,E))
-        self.wep=Label(self,bg="black",image=self.photowep).grid(column=11,row=6,sticky=(N,S,W,E))
-        self.arm=Label(self,bg="black",image=self.photoarm).grid(column=11,row=5,sticky=(N,S,W,E))
-        self.wepinf=Label(self,bg="black",fg="red",font=("Matura MT Script Capitals",9),text=hero.W.name+"\n damage- "+str(hero.W.mindam)+"-"+str(hero.W.maxdam)+"\n"+"critical chance: "+str(int(hero.W.crit*100))+"%").grid(column=12,row=6,columnspan=2,sticky=(N,S,W,E))
-        self.arminf=Label(self,bg="black",fg="red",font=("Matura MT Script Capitals",9),text=hero.A.name+"\n defence- "+str(hero.A.defence)).grid(column=12,row=5,columnspan=2,sticky=(N,S,W,E))
-        self.blank1=Label(self,bg="black",image=self.photoblank).grid(column=11,row=10,sticky=(N,S,W,E))
-        self.blank2=Label(self,bg="black",image=self.photoblank).grid(column=11,row=8,sticky=(N,S,W,E))
-        self.blank3=Label(self,bg="black",image=self.photoblank).grid(column=13,row=8,sticky=(N,S,W,E))
-        self.Right=Button(self,bg="black",image=self.photor,relief=FLAT,command=self.right,width=50,height=50).grid(column=13,row=9,sticky=(N,S,W,E))
-        self.Quit=Button(self,bg="black",relief=FLAT,image=self.photoq, command=self.quit,width=50,height=50).grid(column=13,row=10,sticky=(N,S,W,E))
-        self.Left=Button(self,bg="black",relief=FLAT,image=self.photol,command=self.left,width=50,height=50).grid(column=11,row=9,sticky=(N,S,W,E))
-        self.Up=Button(self,bg="black",relief=FLAT,image=self.photou,command=self.up,width=50,height=50).grid(column=12,row=8,sticky=(N,S,W,E))
-        self.Down=Button(self,bg="black",relief=FLAT,image=self.photod,command=self.down,width=50,height=50).grid(column=12,row=10,sticky=(N,S,W,E))
-        self.Defend=Button(self,bg="black",relief=FLAT,image=self.photode,command=self.defend).grid(column=12,row=7,sticky=(N,S,W,E))
-        self.Attack=Button(self,bg="black",relief=FLAT,image=self.photoat,command=self.attack).grid(column=11,row=7,sticky=(N,S,W,E))
-        self.Heal=Button(self,bg="black",relief=FLAT,image=self.photohe,command=self.heal).grid(column=13,row=7,sticky=(N,S,W,E))
+        self.wep=Label(self,bg="black",image=self.photowep).grid(column=11,row=5,sticky=(N,S,W,E))
+        self.arm=Label(self,bg="black",image=self.photoarm).grid(column=11,row=4,sticky=(N,S,W,E))
+        self.wepinf=Label(self,bg="black",fg="red",font=("Matura MT Script Capitals",9),text=hero.W.name+"\n damage- "+str(hero.W.mindam)+"-"+str(hero.W.maxdam)+"\n"+"critical chance: "+str(int(hero.W.crit*100))+"%").grid(column=12,row=5,columnspan=2,sticky=(N,S,W,E))
+        self.arminf=Label(self,bg="black",fg="red",font=("Matura MT Script Capitals",9),text=hero.A.name+"\n defence- "+str(hero.A.defence)).grid(column=12,row=4,columnspan=2,sticky=(N,S,W,E))
+        self.blank1=Label(self,bg="black",image=self.photoblank).grid(column=11,row=9,sticky=(N,S,W,E))
+        self.blank2=Label(self,bg="black",image=self.photoblank).grid(column=11,row=7,sticky=(N,S,W,E))
+        self.blank3=Label(self,bg="black",image=self.photoblank).grid(column=13,row=7,sticky=(N,S,W,E))
+        self.Right=Button(self,bg="black",image=self.photor,relief=FLAT,command=self.right,width=50,height=50).grid(column=13,row=8,sticky=(N,S,W,E))
+        self.Quit=Button(self,bg="black",relief=FLAT,image=self.photoq, command=self.quit,width=50,height=50).grid(column=13,row=9,sticky=(N,S,W,E))
+        self.Left=Button(self,bg="black",relief=FLAT,image=self.photol,command=self.left,width=50,height=50).grid(column=11,row=8,sticky=(N,S,W,E))
+        self.Up=Button(self,bg="black",relief=FLAT,image=self.photou,command=self.up,width=50,height=50).grid(column=12,row=7,sticky=(N,S,W,E))
+        self.Down=Button(self,bg="black",relief=FLAT,image=self.photod,command=self.down,width=50,height=50).grid(column=12,row=9,sticky=(N,S,W,E))
+        self.Defend=Button(self,bg="black",relief=FLAT,image=self.photode,command=self.defend).grid(column=12,row=6,sticky=(N,S,W,E))
+        self.Attack=Button(self,bg="black",relief=FLAT,image=self.photoat,command=self.attack).grid(column=11,row=6,sticky=(N,S,W,E))
+        self.Heal=Button(self,bg="black",relief=FLAT,image=self.photohe,command=self.heal).grid(column=13,row=6,sticky=(N,S,W,E))
         self.elud=Label(self,bg="black",fg="red",font=("Matura MT Script Capitals",9),text=(hero.hp,"/100")).grid(row=1,column=11,sticky=(N,W,S,E))
         self.eludebar=Progressbar(self,value=hero.hp).grid(row=1,column=12,columnspan=2,sticky=(N,W,S,E))
     def up(self):
