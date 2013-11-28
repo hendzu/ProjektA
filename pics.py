@@ -2,6 +2,11 @@ def get_pic(mark):
     a=Pildid.index(mark)
     return "pics/"+Pildid[a+1]
 Pildid=["#","_2.gif",
+        "back","back.gif",
+        "head","head.gif",
+        "foot","foot.gif",
+        "vasak","vasak.gif",
+        "parem","parem.gif",
         "U","up.gif",
         "D","down.gif",
         "Q","quit.gif",

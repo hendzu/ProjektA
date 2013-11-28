@@ -30,10 +30,10 @@ class Kaart(Frame):
         self.elud=Label(self,bg="black",fg="red",text=(hero.hp,"/100"),font=("Matura MT Script Capitals",9)).grid(row=1,column=11,sticky=(N,W,S,E))
         self.eludebar=Progressbar(self,value=hero.hp).grid(row=1,column=12,columnspan=2,sticky=(N,W,S,E))
 
+    def refmon(self):
         self.mName=Label(self,bg="black",fg="Red",text=hero.M.name,font=("Matura MT Script Capitals",12)).grid(column=11,row=2,columnspan=3,sticky=(N,S,W,E))
-        self.melud=Label(self,bg="black",fg="red",text=(hero.M.hp,"/100"),font=("Matura MT Script Capitals",9)).grid(row=3,column=11,sticky=(N,W,S,E))
+        self.melud=Label(self,bg="black",fg="Red",text=(hero.M.hp,"/100"),font=("Matura MT Script Capitals",9)).grid(row=3,column=11,sticky=(N,S,W,E))
         self.meludebar=Progressbar(self,value=hero.M.hp).grid(row=3,column=12,columnspan=2,sticky=(N,W,S,E))
-
     def press(self,e):
         key = e.keysym
 
@@ -80,8 +80,17 @@ class Kaart(Frame):
         self.photode=PhotoImage(file=get_pic("defence"))
         self.photowep=PhotoImage(file=get_pic(hero.W.pic))
         self.photoarm=PhotoImage(file=get_pic(hero.A.pic))
+        self.photohead=PhotoImage(file=get_pic("head"))
+        self.photofoot=PhotoImage(file=get_pic("foot"))
+        self.photovasak=PhotoImage(file=get_pic("vasak"))
+        self.photoparem=PhotoImage(file=get_pic("parem"))
         style=Style()
         style.configure("SD",background="black")
+
+        self.head=Label(self,bg="black",image=self.photohead).grid(column=0,row=0,columnspan=9,rowspan=2,sticky=(N,S,W,E))
+        self.foot=Label(self,bg="black",image=self.photofoot).grid(column=0,row=9,columnspan=9,sticky=(N,S,W,E))
+        self.vasak=Label(self,bg="black",image=self.photovasak).grid(column=0,row=2,rowspan=7,sticky=(N,S,W,E))
+        self.parem=Label(self,bg="black",image=self.photoparem).grid(column=8,row=2,rowspan=7,sticky=(N,S,W,E))
         self.Name=Label(self,bg="black",fg="Red",text=hero.name,font=("Matura MT Script Capitals",12)).grid(column=11,row=0,columnspan=3,sticky=(N,S,W,E))
         self.wep=Label(self,bg="black",image=self.photowep).grid(column=11,row=5,sticky=(N,S,W,E))
         self.arm=Label(self,bg="black",image=self.photoarm).grid(column=11,row=4,sticky=(N,S,W,E))
@@ -98,7 +107,7 @@ class Kaart(Frame):
         self.Defend=Button(self,bg="black",relief=FLAT,image=self.photode,command=self.defend).grid(column=12,row=6,sticky=(N,S,W,E))
         self.Attack=Button(self,bg="black",relief=FLAT,image=self.photoat,command=self.attack).grid(column=11,row=6,sticky=(N,S,W,E))
         self.Heal=Button(self,bg="black",relief=FLAT,image=self.photohe,command=self.heal).grid(column=13,row=6,sticky=(N,S,W,E))
-        self.elud=Label(self,bg="black",fg="red",font=("Matura MT Script Capitals",9),text=(hero.hp,"/100")).grid(row=1,column=11,sticky=(N,W,S,E))
+        self.elud=Label(self,bg="black",fg="red",text=(hero.hp,"/100"),font=("Matura MT Script Capitals",9)).grid(row=1,column=11,sticky=(N,W,S,E))
         self.eludebar=Progressbar(self,value=hero.hp).grid(row=1,column=12,columnspan=2,sticky=(N,W,S,E))
     def up(self):
         e=UP()
@@ -120,9 +129,9 @@ class Kaart(Frame):
                 UP()
             elif stuff[e][0]=='monster':
                 hero.uuskoletis(stuff[e][1])
-                self.refelud()
                 hero.battle=True
-                hero.M.location=(-1,0)#lahing...
+                hero.mloc=(-1,0)
+                self.refmon()#lahing...
         self.refmap()
     def down(self):
         e=DOWN()
@@ -144,9 +153,9 @@ class Kaart(Frame):
                 DOWN()
             if stuff[e][0]=='monster':
                 hero.uuskoletis(stuff[e][1])
-                self.refelud()
                 hero.battle=True
-                hero.M.location=(1,0)
+                hero.mloc=(1,0)
+                self.refmon()
                 #kunagi DOWN()
         self.refmap()
 
@@ -170,9 +179,9 @@ class Kaart(Frame):
                 RIGHT()
             if stuff[e][0]=='monster':
                 hero.uuskoletis(stuff[e][1])
-                self.refelud()
                 hero.battle=True
-                hero.M.location=(0,1)
+                hero.mloc=(0,1)
+                self.refmon()
         self.refmap()
 
     def left(self):
@@ -195,38 +204,43 @@ class Kaart(Frame):
                 LEFT()
             if stuff[e][0]=='monster':
                 hero.uuskoletis(stuff[e][1])
-                self.refelud()
                 hero.battle=True
-                hero.M.location=(0,-1)
+                hero.mloc=(0,-1)
+                self.refmon()
         self.refmap()
 
     def attack(self):
-        lahing('a',hero)
-        self.refelud()
-        if not hero.battle:
-            if hero.M.location[0]==0:
-                if hero.M.location[1]==1:
-                    self.right()
+        if hero.battle:
+            lahing('a',hero)
+            self.refelud()
+            self.refmon()
+            if not hero.battle:
+                self.meludase=Label(self,bg="black").grid(row=3,column=11,columnspan=3,sticky=(N,W,S,E))
+                if hero.mloc[0]==0:
+                    if hero.mloc[1]==1:
+                        self.right()
+                    else:
+                        self.left()
+                elif hero.mloc[0]==-1:
+                    self.up()
                 else:
-                    self.left()
-            elif hero.M.location[0]==-1:
-                self.up()
-            else:
-                self.down()
+                    self.down()
     def defend(self):
-        lahing('d',hero)
-        self.refelud()
-        if not hero.battle:
-            print('lahingust väljas')
-            if hero.M.location[0]==0:
-                if hero.M.location[1]==1:
-                    self.right()
+        if hero.battle:
+            lahing('d',hero)
+            self.refelud()
+            self.refmon()
+            if not hero.battle:
+                self.meludease=Label(self,bg="black").grid(row=3,column=11,columnspan=3,sticky=(N,W,S,E))
+                if hero.mloc[0]==0:
+                    if hero.mloc[1]==1:
+                        self.right()
+                    else:
+                        self.left()
+                elif hero.mloc[0]==-1:
+                    self.up()
                 else:
-                    self.left()
-            elif hero.M.location[0]==-1:
-                self.up()
-            else:
-                self.down()
+                    self.down()
     def heal(self):
         hero.Heal()
         self.refpot()
@@ -245,6 +259,8 @@ class Kaart(Frame):
                 self.down()
         elif key == "Escape":
             self.quit()
+    def update(self):
+        self.refmap()
 class Tiitel(Frame):
     def __init__(self, master=None):
         Frame.__init__(self,master=None,bg="black")
