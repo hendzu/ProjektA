@@ -29,6 +29,10 @@ class Kaart(Frame):
     def refelud(self):
         self.elud=Label(self,bg="black",fg="red",text=(hero.hp,"/100"),font=("Matura MT Script Capitals",9)).grid(row=1,column=11,sticky=(N,W,S,E))
         self.eludebar=Progressbar(self,value=hero.hp).grid(row=1,column=12,columnspan=2,sticky=(N,W,S,E))
+        if hero.hp<=0:
+            global message
+            message="YOU DIED"
+            self.quit()
 
     def refmon(self):
         self.mName=Label(self,bg="black",fg="Red",text=hero.M.name,font=("Matura MT Script Capitals",12)).grid(column=11,row=2,columnspan=3,sticky=(N,S,W,E))
@@ -100,7 +104,7 @@ class Kaart(Frame):
         self.blank2=Label(self,bg="black",image=self.photoblank).grid(column=11,row=7,sticky=(N,S,W,E))
         self.blank3=Label(self,bg="black",image=self.photoblank).grid(column=13,row=7,sticky=(N,S,W,E))
         self.Right=Button(self,bg="black",image=self.photor,relief=FLAT,command=self.right,width=50,height=50).grid(column=13,row=8,sticky=(N,S,W,E))
-        self.Quit=Button(self,bg="black",relief=FLAT,image=self.photoq, command=self.quit,width=50,height=50).grid(column=13,row=9,sticky=(N,S,W,E))
+        self.Quit=Button(self,bg="black",relief=FLAT,image=self.photoq, command=self.QUIT,width=50,height=50).grid(column=13,row=9,sticky=(N,S,W,E))
         self.Left=Button(self,bg="black",relief=FLAT,image=self.photol,command=self.left,width=50,height=50).grid(column=11,row=8,sticky=(N,S,W,E))
         self.Up=Button(self,bg="black",relief=FLAT,image=self.photou,command=self.up,width=50,height=50).grid(column=12,row=7,sticky=(N,S,W,E))
         self.Down=Button(self,bg="black",relief=FLAT,image=self.photod,command=self.down,width=50,height=50).grid(column=12,row=9,sticky=(N,S,W,E))
@@ -214,6 +218,10 @@ class Kaart(Frame):
             lahing('a',hero)
             self.refelud()
             self.refmon()
+            if hero.battle=="end":
+                global message
+                message="You have WON"
+                self.quit()
             if not hero.battle:
                 self.meludase=Label(self,bg="black").grid(row=3,column=11,columnspan=3,sticky=(N,W,S,E))
                 if hero.mloc[0]==0:
@@ -245,6 +253,10 @@ class Kaart(Frame):
         hero.Heal()
         self.refpot()
         self.refelud()
+    def QUIT(self):
+        global message
+        message="You have left the game"
+        self.quit()
 
     def press(self,e):
         key = e.keysym
@@ -258,9 +270,7 @@ class Kaart(Frame):
             elif key == "Down" or key=="s":
                 self.down()
         elif key == "Escape":
-            self.quit()
-    def update(self):
-        self.refmap()
+            self.QUIT()
 class Tiitel(Frame):
     def __init__(self, master=None):
         Frame.__init__(self,master=None,bg="black")
@@ -269,16 +279,18 @@ class Tiitel(Frame):
         self.ok=False
         self.createwidgets()
     def createwidgets(self):
-        self.nimekast=Label(self,text="Name:",fg="red",bg="black").grid(column=0,row=0)
+        self.photohead=PhotoImage(file=get_pic("head"))
+        self.head=Label(self,bg="black",image=self.photohead).grid(column=0,row=0,columnspan=2,rowspan=2,sticky=(N,S,W,E))
+        self.nimekast=Label(self,text="Name:",fg="red",bg="black",font=("Matura MT Script Capitals",12)).grid(column=0,row=2,sticky=(N,S,W,E))
         self.nimi=StringVar()
-        Entry(self,textvariable=self.nimi,fg="red",bg="black").grid(column=1,row=0)
+        Entry(self,textvariable=self.nimi,fg="red",bg="black",font=("Matura MT Script Capitals",12)).grid(column=1,row=2,sticky=(N,S,W,E))
         self.sex=StringVar()
-        Radiobutton(self,text="F",variable=self.sex,value="fem",fg="red",bg="black").grid(column=0,row=1)
-        Radiobutton(self,text="M",variable=self.sex,value="male",fg="red",bg="black").grid(column=1,row=1)
+        Radiobutton(self,text="Female",variable=self.sex,value="fem",fg="red",bg="black",font=("Matura MT Script Capitals",12)).grid(column=0,row=3,sticky=(N,S,W,E))
+        Radiobutton(self,text="Male",variable=self.sex,value="male",fg="red",bg="black",font=("Matura MT Script Capitals",12)).grid(column=1,row=3,sticky=(N,S,W,E))
         self.mapnr=StringVar()
-        Radiobutton(self,text="Map nr. 1",variable=self.mapnr,value="map1.txt",fg="red",bg="black").grid(column=0,row=2)
-        Radiobutton(self,text="Map nr. 2",variable=self.mapnr,value="map2.txt",fg="red",bg="black").grid(column=1,row=2)
-        self.cont=Button(self,text="CONTINUE",command=self.check,fg="red",bg="black").grid(column=0,row=3)
+        Radiobutton(self,text="Map nr. 1",variable=self.mapnr,value="map1.txt",fg="red",bg="black",font=("Matura MT Script Capitals",12)).grid(column=0,row=4,sticky=(N,S,W,E))
+        Radiobutton(self,text="Map nr. 2",variable=self.mapnr,value="map2.txt",fg="red",bg="black",font=("Matura MT Script Capitals",12)).grid(column=1,row=4,sticky=(N,S,W,E))
+        self.cont=Button(self,text="CONTINUE",command=self.check,fg="red",bg="black",font=("Matura MT Script Capitals",9)).grid(column=0,row=5,sticky=(N,S,W,E))
     def press(self,e):
         key = e.keysym
         if key=="Return":
@@ -289,8 +301,17 @@ class Tiitel(Frame):
             loo_kaart(self.mapnr.get())
             hero=char(self.nimi.get(),self.sex.get())
             self.quit()
+class end(Frame):
+    def __init__(self, master=None):
+        Frame.__init__(self,master=None,bg="black")
+        self.createwidgets()
 
-        
+    def createwidgets(self):
+        self.inf=Label(text=message,fg="red",bg="black",font=("Matura MT Script Capitals",12)).grid(row=0,column=0,sticky=(N,S,W,E))
+        self.esc=Button(text="QUIT",fg="red",bg="black",font=("Matura MT Script Capitals",12),command=self.ESC).grid(row=1,column=0,sticky=(N,S,W,E))
+    def ESC(self):
+        self.quit()
+
 root=Tk()
 root.title("Something Dungeon")
 aken1=Tiitel(root)
@@ -298,4 +319,8 @@ aken1.mainloop()
 aken1.destroy()
 aken2=Kaart(root)
 aken2.mainloop()
+aken2.destroy()
+aken3=end(root)
+aken3.mainloop()
+aken3.destroy()
 root.destroy()
