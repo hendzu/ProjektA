@@ -307,20 +307,27 @@ class end(Frame):
         self.createwidgets()
 
     def createwidgets(self):
-        self.inf=Label(text=message,fg="red",bg="black",font=("Matura MT Script Capitals",12)).grid(row=0,column=0,sticky=(N,S,W,E))
+        self.inf=Label(text=message,fg="red",bg="black",font=("Matura MT Script Capitals",12)).grid(row=0,column=0,columnspan=2,sticky=(N,S,W,E))
         self.esc=Button(text="QUIT",fg="red",bg="black",font=("Matura MT Script Capitals",12),command=self.ESC).grid(row=1,column=0,sticky=(N,S,W,E))
+        self.re=Button(text="REPLAY",fg="red",bg="black",font=("Matura MT Script Capitals",12),command=self.re).grid(row=1,column=1,sticky=(N,S,W,E))
     def ESC(self):
         self.quit()
+        global play
+        play=False
+    def re(self):
+        self.quit()
 
-root=Tk()
-root.title("Something Dungeon")
-aken1=Tiitel(root)
-aken1.mainloop()
-aken1.destroy()
-aken2=Kaart(root)
-aken2.mainloop()
-aken2.destroy()
-aken3=end(root)
-aken3.mainloop()
-aken3.destroy()
-root.destroy()
+play=True
+while play==True:
+    root=Tk()
+    root.title("Something Dungeon")
+    aken1=Tiitel(root)
+    aken1.mainloop()
+    aken1.destroy()
+    aken2=Kaart(root)
+    aken2.mainloop()
+    aken2.destroy()
+    aken3=end(root)
+    aken3.mainloop()
+    aken3.destroy()
+    root.destroy()
