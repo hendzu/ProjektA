@@ -16,29 +16,33 @@ def lahing(tegevus,char):                #monster=number
                 char.M.hp-=ca-ma
             elif ma>ca:
                 char.hp-=ma-ca
-            else:
-                print('You both attack with equal force!')
+            #else:
+                #print('You both attack with equal force!')
         else:                               #koletis kaitseb
             ma=randint(0,char.M.defence)
             if ca>ma:
                 char.M.hp-=ca-ma
-            else:
-                print('Monster defended successfully!')
+            #else:
+                #print('Monster defended successfully!')
     elif tegevus=='d':
-        char.boonus+=char.A.defence
-        if randint(0,1)==1:                 #koletis kaitseb
-            print('None of you are brave enough to attack.')
-        else:                               #koletis ründab
+        if char.boonus<=50:
+            char.boonus+=char.A.defence
+        if randint(0,1)==1:               #koletis kaitseb
+            None
+            #print('None of you are brave enough to attack.')
+        else:
             ca=randint(0,char.A.defence)
             ma=randint(0,char.M.attack)
             if ma>ca:
                 char.hp-=ma-ca
-            else:
-                print('You defended successfully!')
+            #else:
+                #print('You defended successfully!')
     if char.M.hp<=0:
-        print("The",char.M.name,"is DEAD!")    #lahing over
+        #print("The",char.M.name,"is DEAD!")    #lahing over
         delfrommap(char.mloc[0],char.mloc[1])
         if char.M.name=="Something Bad Guy":
+            char.M.hp=100
+            char.uuskoletis(0)
             char.battle="end"
         else:
             char.M.hp=100
@@ -46,7 +50,8 @@ def lahing(tegevus,char):                #monster=number
             char.battle=False
         #koletis kustub kaardilt
     if char.hp<=0:
-        print("You are DEAD!")              #GAME OVER
+        None
+        #print("You are DEAD!")              #GAME OVER
         
     #print("koletise elud",char.M.hp)           #lahingu kontroll...
     #print("sinu elud",char.hp)              #lahingu kontroll...

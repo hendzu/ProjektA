@@ -36,22 +36,33 @@ class Kaart(Frame):
 
     def refmon(self):
         self.mName=Label(self,bg="black",fg="Red",text=hero.M.name,font=("Matura MT Script Capitals",12)).grid(column=11,row=2,columnspan=3,sticky=(N,S,W,E))
-        self.melud=Label(self,bg="black",fg="Red",text=(hero.M.hp,"/100"),font=("Matura MT Script Capitals",9)).grid(row=3,column=11,sticky=(N,S,W,E))
-        self.meludebar=Progressbar(self,value=hero.M.hp).grid(row=3,column=12,columnspan=2,sticky=(N,W,S,E))
+        if hero.M.name!=' ':
+            self.melud=Label(self,bg="black",fg="Red",text=(hero.M.hp,"/100"),font=("Matura MT Script Capitals",9)).grid(row=3,column=11,sticky=(N,S,W,E))
+            self.meludebar=Progressbar(self,value=hero.M.hp).grid(row=3,column=12,columnspan=2,sticky=(N,W,S,E))
+        else:
+            self.melud=Label(self,bg="black",fg="Red",text=(""),font=("Matura MT Script Capitals",9)).grid(row=3,column=11,sticky=(N,S,W,E))
+            # must taust
+            # self.meludebar=Label(self,bg="black",image=self.photoblank).grid(column=12,row=3,sticky=(N,S,W,E))
     def press(self,e):
         key = e.keysym
-
-        if key == "Left" or key=="a":
-            self.left()
-        elif key == "Right" or key=="d":
-            self.right()
-        elif key == "Up" or key=="w":
-            self.up()
-        elif key == "Down" or key=="s":
-            self.down()
-        elif key == "Escape":
+        if not hero.battle:
+            if key == "Left":
+                self.left()
+            elif key == "Right":
+                self.right()
+            elif key == "Up":
+                self.up()
+            elif key == "Down":
+                self.down()
+        if key == "Escape":
             self.quit()
-
+        if hero.battle:
+            if key == "q":
+                self.attack()
+            elif key == "w":
+                self.defend()
+        if key == "e":
+            self.heal()
     def newmap(self):
         self.Kaart=[]
         Kangelane,Map=out()
@@ -92,9 +103,11 @@ class Kaart(Frame):
         style.configure("SD",background="black")
 
         self.head=Label(self,bg="black",image=self.photohead).grid(column=0,row=0,columnspan=9,rowspan=2,sticky=(N,S,W,E))
+        self.eludebar=Progressbar(self,value=hero.hp).grid(row=1,column=12,columnspan=2,sticky=(N,W,S,E))
         self.foot=Label(self,bg="black",image=self.photofoot).grid(column=0,row=9,columnspan=9,sticky=(N,S,W,E))
         self.vasak=Label(self,bg="black",image=self.photovasak).grid(column=0,row=2,rowspan=7,sticky=(N,S,W,E))
         self.parem=Label(self,bg="black",image=self.photoparem).grid(column=8,row=2,rowspan=7,sticky=(N,S,W,E))
+        self.Title=Label(self,bg="black",fg="Red",text="Something Dungeon",font=("Matura MT Script Capitals",20)).grid(column=0,row=0,columnspan=10,sticky=(N,S,W,E))
         self.Name=Label(self,bg="black",fg="Red",text=hero.name,font=("Matura MT Script Capitals",12)).grid(column=11,row=0,columnspan=3,sticky=(N,S,W,E))
         self.wep=Label(self,bg="black",image=self.photowep).grid(column=11,row=5,sticky=(N,S,W,E))
         self.arm=Label(self,bg="black",image=self.photoarm).grid(column=11,row=4,sticky=(N,S,W,E))
@@ -112,7 +125,8 @@ class Kaart(Frame):
         self.Attack=Button(self,bg="black",relief=FLAT,image=self.photoat,command=self.attack).grid(column=11,row=6,sticky=(N,S,W,E))
         self.Heal=Button(self,bg="black",relief=FLAT,image=self.photohe,command=self.heal).grid(column=13,row=6,sticky=(N,S,W,E))
         self.elud=Label(self,bg="black",fg="red",text=(hero.hp,"/100"),font=("Matura MT Script Capitals",9)).grid(row=1,column=11,sticky=(N,W,S,E))
-        self.eludebar=Progressbar(self,value=hero.hp).grid(row=1,column=12,columnspan=2,sticky=(N,W,S,E))
+        #self.meludebar=Progressbar(self,value=hero.M.hp).grid(row=3,column=12,columnspan=2,sticky=(N,W,S,E))
+
     def up(self):
         e=UP()
         if e=="p" and hero.pot!=5:
@@ -253,24 +267,12 @@ class Kaart(Frame):
         hero.Heal()
         self.refpot()
         self.refelud()
+
     def QUIT(self):
         global message
         message="You have left the game"
         self.quit()
 
-    def press(self,e):
-        key = e.keysym
-        if not hero.battle:
-            if key == "Left" or key=="a":
-                self.left()
-            elif key == "Right" or key=="d":
-                self.right()
-            elif key == "Up" or key=="w":
-                self.up()
-            elif key == "Down" or key=="s":
-                self.down()
-        elif key == "Escape":
-            self.QUIT()
 class Tiitel(Frame):
     def __init__(self, master=None):
         Frame.__init__(self,master=None,bg="black")
@@ -291,6 +293,14 @@ class Tiitel(Frame):
         Radiobutton(self,text="Map nr. 1",variable=self.mapnr,value="map1.txt",fg="red",bg="black",font=("Matura MT Script Capitals",12)).grid(column=0,row=4,sticky=(N,S,W,E))
         Radiobutton(self,text="Map nr. 2",variable=self.mapnr,value="map2.txt",fg="red",bg="black",font=("Matura MT Script Capitals",12)).grid(column=1,row=4,sticky=(N,S,W,E))
         self.cont=Button(self,text="CONTINUE",command=self.check,fg="red",bg="black",font=("Matura MT Script Capitals",9)).grid(column=0,row=5,sticky=(N,S,W,E))
+        self.juhis=Label(self,bg="black",fg="Red",text='''How to play:
+Controls:
+move arrows, attack Q, defend W, heal E.
+Health pots heal 50hp.
+If you defend then you can attack with
+more force (depending on your defence) next time.
+If you run into a monster then you can't run away before you kill it.
+If you die, the game ends.''',font=("Matura MT Script Capitals",10)).grid(column=0,row=6,columnspan=2,sticky=(N,S,W,E))
     def press(self,e):
         key = e.keysym
         if key=="Return":
@@ -298,7 +308,10 @@ class Tiitel(Frame):
     def check(self):
         if self.sex.get()!="" and self.mapnr.get()!="":
             global hero
-            loo_kaart(self.mapnr.get())
+            if self.nimi.get()=="Mihkel":
+                loo_kaart("maps.txt")
+            else:
+                loo_kaart(self.mapnr.get())
             hero=char(self.nimi.get(),self.sex.get())
             self.quit()
 class end(Frame):
@@ -316,7 +329,6 @@ class end(Frame):
         play=False
     def re(self):
         self.quit()
-
 play=True
 while play==True:
     root=Tk()

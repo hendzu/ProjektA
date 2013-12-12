@@ -1,5 +1,6 @@
 from time import *
 from random import *
+from ??? import*
 
 def lahing(monster,tegevus):
     sa=SA()
